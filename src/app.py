@@ -4,6 +4,7 @@ from src.routes.product_routes import product_bp, admin_product_bp
 from src.routes.auth_routes import login_bp, register_bp
 from src.routes.order_routes import admin_order_bp
 
+from src.routes.vulnerability_routes import vulnerability_bp
 
 
 def create_app():
@@ -17,7 +18,11 @@ def create_app():
     app.register_blueprint(cart_bp)
     app.register_blueprint(login_bp)
     app.register_blueprint(register_bp)
+
     app.register_blueprint(admin_product_bp)
     app.register_blueprint(admin_order_bp)
+
+    app.register_blueprint(vulnerability_bp)
+
 
     return  app
