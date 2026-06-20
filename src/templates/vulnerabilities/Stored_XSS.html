@@ -4,11 +4,36 @@
 
 <div class="container">
 
-    <h1>Stored XSS</h1>
+    <h1>Stored XSS Demo</h1>
 
     <p>
-        This page demonstrates Stored XSS vulnerability.
+        This page demonstrates a Stored XSS vulnerability.
     </p>
+
+    <form method="POST">
+
+        <input
+            type="text"
+            name="comment"
+            placeholder="Enter a comment">
+
+        <button type="submit">
+            Submit
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h3>Stored Comments</h3>
+
+    {% for comment in comments %}
+
+        <div>
+            {{ comment|safe }}
+        </div>
+
+    {% endfor %}
 
 </div>
 
