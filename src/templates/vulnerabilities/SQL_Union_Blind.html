@@ -2,13 +2,151 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container mt-5">
 
-    <h1>SQL Union / Blind SQLi</h1>
+    <h1>Union-Based and Blind SQL Injection</h1>
 
     <p>
-        This page demonstrates SQL Union / Blind SQLi vulnerability.
+        This page intentionally demonstrates two SQL Injection vulnerabilities:
+        Union-Based SQL Injection and Blind SQL Injection.
+        These vulnerabilities are implemented for educational and security testing purposes.
     </p>
+
+    <hr>
+
+    <h2>1. Union-Based SQL Injection</h2>
+
+    <form method="POST">
+        <input type="hidden" name="attack_type" value="union">
+
+        <div class="form-group">
+            <label>Product Search</label>
+            <input class="form-control"
+                   name="search"
+                   placeholder="Enter a product name">
+        </div>
+
+        <button class="btn btn-danger mt-2" type="submit">
+            Execute Union-Based SQL Injection
+        </button>
+    </form>
+
+    <p class="mt-3">
+        Example payload:
+    </p>
+
+    <pre><code>' UNION SELECT id, username, password FROM users--</code></pre>
+
+    {% if union_query %}
+        <h5>Executed SQL Query</h5>
+        <pre><code>{{ union_query }}</code></pre>
+    {% endif %}
+
+    {% if union_message %}
+        <div class="alert alert-info mt-3">
+            {{ union_message }}
+        </div>
+    {% endif %}
+
+    {% if union_results %}
+        <h5>Query Results</h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name / Username</th>
+                    <th>Description / Password</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in union_results %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <hr>
+
+    <h2>2. Blind SQL Injection</h2>
+
+    <form method="POST">
+        <input type="hidden" name="attack_type" value="blind">
+
+        <div class="form-group">
+            <label>Product ID</label>
+
+            <input
+                class="form-control"
+                name="product_id"
+                placeholder="Enter a product ID">
+        </div>
+
+        <button
+            class="btn btn-warning mt-2"
+            type="submit">
+            Execute Blind SQL Injection
+        </button>
+    </form>
+
+    <p class="mt-3">
+        Example payload returning TRUE:
+    </p>
+
+    <pre><code>1 OR 1=1</code></pre>
+
+    <p>
+        Example payload returning FALSE:
+    </p>
+
+    <pre><code>1 AND 1=2</code></pre>
+
+    <p>
+        Example payload:
+    </p>
+
+    <pre><code>1 OR id > 0</code></pre>
+
+    {% if blind_query %}
+        <h5>Executed SQL Query</h5>
+        <pre><code>{{ blind_query }}</code></pre>
+    {% endif %}
+
+    {% if blind_message %}
+        <div class="alert alert-info mt-3">
+            {{ blind_message }}
+        </div>
+    {% endif %}
+
+    {% if blind_results %}
+        <h5 class="mt-4">
+            Returned Products
+        </h5>
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Product Name</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for row in blind_results %}
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
 </div>
 
