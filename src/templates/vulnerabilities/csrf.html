@@ -2,12 +2,59 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container mt-5">
 
-    <h1>CSRF</h1>
+    <h1>Cross-Site Request Forgery</h1>
 
     <p>
-        This page demonstrates CSRF vulnerability.
+        This page intentionally contains a CSRF vulnerability.
+        The email change form does not use any CSRF token.
+    </p>
+
+    <hr>
+
+    <h2>User Profile</h2>
+
+    <p><strong>Username:</strong> {{ user.username }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+
+    {% if message %}
+        <div class="alert alert-info mt-3">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <hr>
+
+    <h2>Change Email</h2>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>New Email</label>
+
+            <input
+                type="email"
+                name="email"
+                class="form-control"
+                placeholder="Enter new email">
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-danger mt-2">
+            Change Email
+        </button>
+
+    </form>
+
+    <hr>
+
+    <h2>Example Attack</h2>
+
+    <p>
+        An attacker can create an external HTML page that silently submits a POST request
+        to this endpoint and changes the victim email without consent.
     </p>
 
 </div>
