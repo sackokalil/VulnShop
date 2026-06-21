@@ -2,13 +2,83 @@
 
 {% block content %}
 
-<div class="container">
+<div class="container mt-5">
 
-    <h1>Broken Authentication Demo</h1>
+    <h1>Broken Authentication - Insecure Password Reset</h1>
 
     <p>
-        This page demonstrates a Broken Authentication vulnerability.
+        This page intentionally demonstrates a broken authentication vulnerability.
+        The application allows a password reset without verifying the user's identity.
     </p>
+
+    <hr>
+
+    <h2>Vulnerable Password Reset</h2>
+
+    <p>
+        An attacker only needs to know the victim's username to reset the password.
+There is no reset token, no identity verification, no OTP, and no ownership validation.
+    </p>
+
+    <form method="POST">
+
+        <div class="form-group">
+            <label>Victim Username</label>
+            <input
+                type="text"
+                name="username"
+                class="form-control"
+                placeholder="john"
+                required>
+        </div>
+
+        <div class="form-group mt-3">
+            <label>New Password</label>
+            <input
+                type="text"
+                name="new_password"
+                class="form-control"
+                placeholder="New password"
+                required>
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-danger mt-3">
+            Reset Password
+        </button>
+
+    </form>
+
+    {% if message %}
+        <div class="alert alert-info mt-3">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    {% if query %}
+        <h5 class="mt-4">Executed SQL Query</h5>
+        <pre><code>{{ query }}</code></pre>
+    {% endif %}
+
+    <hr>
+
+    <h2>Why This Is Vulnerable</h2>
+
+    <p>
+        A secure password reset flow must prove that the person requesting the reset
+        owns the account. This implementation does not perform any verification.
+    </p>
+
+    <h2>Possible Mitigations</h2>
+
+    <ul>
+        <li>Generate a unique password reset token.</li>
+        <li>Send the reset link only to the user's registered email address.</li>
+        <li>Set a short expiration time for the reset token.</li>
+        <li>Invalidate the token after one use.</li>
+        <li>Hash the new password before storing it.</li>
+    </ul>
 
 </div>
 
